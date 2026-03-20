@@ -4,26 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27a7938b-addd-4593-a6f8-5acfe9dfb9df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dcRaspRFIDreader.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/application/use_cases/publish_frame_periodically.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/entites/ProtocolFrame.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/entites/e_INFO_CARD_ONLINE_GW_MSG.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/entites/e_UHF_RFID_TAG_READ.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/services/card_status_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/services/mqtt_checksum_calculator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/services/mqtt_frame_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/services/mqtt_messages.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/services/uhfRfidTagReadBuilder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/value_objects/Mqtt/Media.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/value_objects/Mqtt/MqttMessageType.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/infrastructure/Mqtt/MqttPublisher.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/infrastructure/network/network_info.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="27a7938b-addd-4593-a6f8-5acfe9dfb9df" name="Changes" comment="ds">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +22,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "byanigli"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/byanigli/dcRaspRFIDreader.git",
+    "accountId": "62c7697f-f0f7-4ba9-b3f3-2714a9d73bdf"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -107,14 +101,27 @@
       <updated>1773828486516</updated>
       <workItem from="1773828487522" duration="491000" />
       <workItem from="1773828981675" duration="4313000" />
-      <workItem from="1773833347051" duration="22503000" />
+      <workItem from="1773833347051" duration="23463000" />
     </task>
+    <task id="LOCAL-00001" summary="ds">
+      <option name="closed" value="true" />
+      <created>1773989634450</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1773989634450</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="ds" />
+    <option name="LAST_COMMIT_MESSAGE" value="ds" />
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/dcRaspRFIDreader$main.coverage" NAME="main Coverage Results" MODIFIED="1773959492795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dcRaspRFIDreader$main.coverage" NAME="main Coverage Results" MODIFIED="1773998667182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
