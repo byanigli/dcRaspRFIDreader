@@ -20,7 +20,7 @@ def main() -> None:
     )
 
     PORT = 6000
-    NETWORK = "192.168.1."
+    NETWORK = "10.0.0."
     TIMEOUT = 0.5
 
     for i in range(1, 256):
