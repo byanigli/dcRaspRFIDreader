@@ -18,8 +18,7 @@ def main() -> None:
         password="Okan1234.",
     )
 
-    ser = serial.Serial('/dev/tty.usbserial', 9600)
-    print(ser.readline())
+
 
     try:
         publisher.connect()
