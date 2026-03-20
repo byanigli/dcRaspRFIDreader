@@ -4,6 +4,7 @@ import serial
 
 from domain.services.mqtt_messages import MqttMessages
 from infrastructure.Mqtt.MqttPublisher import MqttPublisher
+import socket
 
 
 def main() -> None:
@@ -18,8 +19,26 @@ def main() -> None:
         password="Okan1234.",
     )
 
+    PORT = 6000
+    NETWORK = "192.168.1."
+    TIMEOUT = 0.5
 
+    for i in range(1, 256):
+        ip = NETWORK + str(i)
 
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(TIMEOUT)
+
+        try:
+            result = s.connect_ex((ip, PORT))
+            if result == 0:
+                print(f"[OPEN] {ip}:{PORT}")
+        except Exception:
+            pass
+        finally:
+            s.close()
+
+    print("[CLOSE]")
     try:
         publisher.connect()
 
