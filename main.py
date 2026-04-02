@@ -1,73 +1,103 @@
 import time
 
-import serial
-
+from domain.entites.rfid.ReaderConfig import ReaderConfig
 from domain.services.mqtt_messages import MqttMessages
 from infrastructure.Mqtt.MqttPublisher import MqttPublisher
-import socket
+from infrastructure.rfid.rru_reader import RruReader
+from infrastructure.rfid.serial_listener import SerialRFIDListener
+from infrastructure.rfid.serial_transport import SerialTransport
 
 
 def main() -> None:
     mqtt_messages = MqttMessages()
+
     publisher = MqttPublisher(
         host="217.195.207.251",
         port=1883,
         lwtMessages=mqtt_messages.get_online_message(False),
-        disconnectMessages= mqtt_messages.get_online_message(False),
+        disconnectMessages=mqtt_messages.get_online_message(False),
         client_id="dc-rfid-raspberry",
         username="okan",
         password="Okan1234.",
     )
 
-    PORT = 6000
-    NETWORK = "10.0.0."
-    TIMEOUT = 0.5
+    config = ReaderConfig(
+        port="/dev/ttyUSB0",
+        baudrate=57600,
+        timeout=1,
+        address=0x00
+    )
 
-    for i in range(1, 256):
-        ip = NETWORK + str(i)
+    transport = SerialTransport(
+        port=config.port,
+        baudrate=config.baudrate,
+        timeout=config.timeout
+    )
 
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(TIMEOUT)
+    reader = RruReader(transport, config)
+    listener = None
 
-        try:
-            result = s.connect_ex((ip, PORT))
-            if result == 0:
-                print(f"[OPEN] {ip}:{PORT}")
-        except Exception:
-            pass
-        finally:
-            s.close()
-
-    print("[CLOSE]")
     try:
         publisher.connect()
 
-        mqtt_messages = MqttMessages()
         packet, topic = mqtt_messages.get_online_message(True)
         publisher.publish(topic, packet)
 
-        print("Online mesaj gönderildi. Bekleniyor...")
+        print("Online mesaj gönderildi.")
+
+        # DEBUG
+        reader.connect()
+
+        raw = reader.get_reader_info()
+        print("RAW READER INFO:", raw.hex().upper())
+        print("PARSED READER INFO:", reader.get_reader_info_parsed_from_raw(raw))
+
+        # inventory test
+        tags = reader.inventory()
+        print("INVENTORY TAGS:", tags)
+
+        reader.disconnect()
+
+        print("RFID listener başlatılıyor...")
+
+        transport2 = SerialTransport(
+            port=config.port,
+            baudrate=config.baudrate,
+            timeout=config.timeout
+        )
+        reader2 = RruReader(transport2, config)
+        listener = SerialRFIDListener(reader2, publisher)
+        listener.start()
 
         while True:
-            time.sleep(1)  # sadece bekliyor
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print("CTRL+C ile çıkılıyor...")
+        if listener:
+            listener.running = False
+
+    except Exception as e:
+        print(f"HATA: {e}")
+        if listener:
+            listener.running = False
 
     finally:
+        try:
+            if listener:
+                listener.running = False
+        except Exception:
+            pass
+
+        try:
+            reader.disconnect()
+        except Exception:
+            pass
+
         try:
             publisher.disconnect()
         except Exception:
             pass
-
-
-# use_case = PublishFramePeriodically(
-#     publisher=publisher,
-#     frame_factory=build_test_frame,
-#     interval_seconds=5.0,
-# )
-
-# use_case.run()
 
 
 if __name__ == "__main__":
