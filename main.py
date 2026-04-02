@@ -8,6 +8,49 @@ from infrastructure.rfid.serial_listener import SerialRFIDListener
 from infrastructure.rfid.serial_transport import SerialTransport
 
 
+def create_reader_and_listener(port: str, publisher: MqttPublisher):
+    config = ReaderConfig(
+        port=port,
+        baudrate=57600,
+        timeout=1,
+        address=0x00
+    )
+
+    transport = SerialTransport(
+        port=config.port,
+        baudrate=config.baudrate,
+        timeout=config.timeout
+    )
+
+    reader = RruReader(transport, config)
+
+    print(f"{port} bağlanıyor...")
+    reader.connect()
+
+    raw = reader.get_reader_info()
+    print(f"{port} RAW READER INFO:", raw.hex().upper())
+    print(f"{port} PARSED READER INFO:", reader.get_reader_info_parsed_from_raw(raw))
+
+    tags = reader.inventory()
+    print(f"{port} INVENTORY TAGS:", tags)
+
+    reader.disconnect()
+
+    print(f"{port} listener başlatılıyor...")
+
+    transport2 = SerialTransport(
+        port=config.port,
+        baudrate=config.baudrate,
+        timeout=config.timeout
+    )
+
+    reader2 = RruReader(transport2, config)
+    listener = SerialRFIDListener(reader2, publisher)
+    listener.start()
+
+    return listener
+
+
 def main() -> None:
     mqtt_messages = MqttMessages()
 
@@ -21,21 +64,7 @@ def main() -> None:
         password="Okan1234.",
     )
 
-    config = ReaderConfig(
-        port="/dev/ttyUSB1",
-        baudrate=57600,
-        timeout=1,
-        address=0x00
-    )
-
-    transport = SerialTransport(
-        port=config.port,
-        baudrate=config.baudrate,
-        timeout=config.timeout
-    )
-
-    reader = RruReader(transport, config)
-    listener = None
+    listeners = []
 
     try:
         publisher.connect()
@@ -45,54 +74,34 @@ def main() -> None:
 
         print("Online mesaj gönderildi.")
 
-        # DEBUG
-        reader.connect()
+        ports = ["/dev/ttyUSB0", "/dev/ttyUSB1"]
 
-        raw = reader.get_reader_info()
-        print("RAW READER INFO:", raw.hex().upper())
-        print("PARSED READER INFO:", reader.get_reader_info_parsed_from_raw(raw))
+        for port in ports:
+            try:
+                listener = create_reader_and_listener(port, publisher)
+                listeners.append(listener)
+            except Exception as e:
+                print(f"{port} başlatılırken hata: {e}")
 
-        # inventory test
-        tags = reader.inventory()
-        print("INVENTORY TAGS:", tags)
-
-        reader.disconnect()
-
-        print("RFID listener başlatılıyor...")
-
-        transport2 = SerialTransport(
-            port=config.port,
-            baudrate=config.baudrate,
-            timeout=config.timeout
-        )
-        reader2 = RruReader(transport2, config)
-        listener = SerialRFIDListener(reader2, publisher)
-        listener.start()
+        if not listeners:
+            print("Hiçbir reader başlatılamadı.")
+            return
 
         while True:
             time.sleep(1)
 
     except KeyboardInterrupt:
         print("CTRL+C ile çıkılıyor...")
-        if listener:
-            listener.running = False
 
     except Exception as e:
         print(f"HATA: {e}")
-        if listener:
-            listener.running = False
 
     finally:
-        try:
-            if listener:
+        for listener in listeners:
+            try:
                 listener.running = False
-        except Exception:
-            pass
-
-        try:
-            reader.disconnect()
-        except Exception:
-            pass
+            except Exception:
+                pass
 
         try:
             publisher.disconnect()
