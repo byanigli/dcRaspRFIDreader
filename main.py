@@ -22,7 +22,7 @@ def main() -> None:
     )
 
     config = ReaderConfig(
-        port="/dev/ttyUSB0",
+        port="/dev/ttyUSB1",
         baudrate=57600,
         timeout=1,
         address=0x00
