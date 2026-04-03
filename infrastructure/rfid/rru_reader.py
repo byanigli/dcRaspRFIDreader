@@ -40,7 +40,6 @@ class RruReader(IRfidReader):
         raw = self.transport.receive(1024)
         return RruResponseParser.parse_inventory(raw)
 
-    def stop_inventory(self) -> bool:
 
 
     def get_reader_info_parsed_from_raw(self, raw: bytes) -> dict:
