@@ -30,6 +30,9 @@ def create_reader_and_listener(port: str, publisher: MqttPublisher):
     raw = reader.get_reader_info()
     print(f"{port} RAW READER INFO:", raw.hex().upper())
     print(f"{port} PARSED READER INFO:", reader.get_reader_info_parsed_from_raw(raw))
+    print("---------------------------------------------------------------------------------")
+    raw = reader.set_reader_power(28)
+    print(f"{port} RAW SET READER:", raw.hex().upper())
 
     tags = reader.inventory()
     print(f"{port} INVENTORY TAGS:", tags)
@@ -75,6 +78,8 @@ def main() -> None:
         print("Online mesaj gönderildi.")
 
         ports = ["/dev/ttyUSB0", "/dev/ttyUSB1"]
+
+        #ports = ["/dev/tty.usbserial-0001"]
 
         for port in ports:
             try:

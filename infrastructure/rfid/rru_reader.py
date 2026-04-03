@@ -1,3 +1,4 @@
+from tkinter import BooleanVar
 from typing import List
 
 from domain.entites.rfid.ReaderConfig import ReaderConfig
@@ -28,11 +29,19 @@ class RruReader(IRfidReader):
         raw = self.get_reader_info()
         return RruResponseParser.parse_reader_info(raw)
 
+    def set_reader_power(self, power: int) -> bytes:
+        raw = RruProtocol.set_reader_uhfPower(power)
+        self.transport.send(raw)
+        return self.transport.receive(256)
+
     def inventory(self) -> List[TagRead]:
         cmd = RruProtocol.inventory(self.config.address)
         self.transport.send(cmd)
         raw = self.transport.receive(1024)
         return RruResponseParser.parse_inventory(raw)
+
+    def stop_inventory(self) -> bool:
+
 
     def get_reader_info_parsed_from_raw(self, raw: bytes) -> dict:
         return RruResponseParser.parse_reader_info(raw)
