@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27a7938b-addd-4593-a6f8-5acfe9dfb9df" name="Changes" comment="ds" />
+    <list default="true" id="27a7938b-addd-4593-a6f8-5acfe9dfb9df" name="Changes" comment="ds">
+      <change beforePath="$PROJECT_DIR$/infrastructure/rfid/rru_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/infrastructure/rfid/rru_reader.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +104,7 @@
       <workItem from="1773833347051" duration="38461000" />
       <workItem from="1774249358464" duration="19413000" />
       <workItem from="1774446745427" duration="9720000" />
-      <workItem from="1775139736523" duration="9169000" />
+      <workItem from="1775139736523" duration="9289000" />
     </task>
     <task id="LOCAL-00001" summary="ds">
       <option name="closed" value="true" />
@@ -192,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775201088088</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="ds">
+      <option name="closed" value="true" />
+      <created>1775201232038</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1775201232038</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

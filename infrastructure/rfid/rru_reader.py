@@ -1,4 +1,3 @@
-from tkinter import BooleanVar
 from typing import List
 
 from domain.entites.rfid.ReaderConfig import ReaderConfig
