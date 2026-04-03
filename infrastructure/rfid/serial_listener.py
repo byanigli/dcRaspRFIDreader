@@ -35,7 +35,18 @@ class SerialRFIDListener(threading.Thread):
 
                             if self.reader.__class__.__name__ == "RruReader":
                                 self.last_seen[tag.epc] = now
-                                payload = self.mqtt_messages.get_UHF_Read_Tag_Message(self.reader.getConfig().antennaNumber, tag.epc, 255)
+                                antenna = self.reader.getConfig().antennaNumber
+                                topic = payload[1]
+                                packet = payload[0]
+                                payload = self.mqtt_messages.get_UHF_Read_Tag_Message(antenna, tag.epc, 255)
+                                print(
+                                    f"[RFID READ] "
+                                    f"reader={self.reader.__class__.__name__} "
+                                    f"antenna={antenna} "
+                                    f"epc={tag.epc} "
+                                    f"time={time.strftime('%H:%M:%S')} "
+                                    f"topic={topic}"
+                                )
                                 self.publisher.publish(payload[1],payload[0])
 
                     time.sleep(0.1)
