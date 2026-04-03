@@ -8,12 +8,13 @@ from infrastructure.rfid.serial_listener import SerialRFIDListener
 from infrastructure.rfid.serial_transport import SerialTransport
 
 
-def create_reader_and_listener(port: str, publisher: MqttPublisher):
+def create_reader_and_listener(port: str, publisher: MqttPublisher, antenna_number: int):
     config = ReaderConfig(
         port=port,
         baudrate=57600,
         timeout=1,
-        address=0x00
+        address=0x00,
+        antennaNumber=antenna_number
     )
 
     transport = SerialTransport(
@@ -28,27 +29,15 @@ def create_reader_and_listener(port: str, publisher: MqttPublisher):
     reader.connect()
 
     raw = reader.get_reader_info()
-    print(f"{port} RAW READER INFO:", raw.hex().upper())
-    print(f"{port} PARSED READER INFO:", reader.get_reader_info_parsed_from_raw(raw))
+    print(f"{port} RAW READER INFO: {raw.hex().upper()}")
+    print(f"{port} PARSED READER INFO: {reader.get_reader_info_parsed_from_raw(raw)}")
     print("---------------------------------------------------------------------------------")
+
     raw = reader.set_reader_power(28)
-    print(f"{port} RAW SET READER:", raw.hex().upper())
-
-    tags = reader.inventory()
-    print(f"{port} INVENTORY TAGS:", tags)
-
-    reader.disconnect()
+    print(f"{port} RAW SET READER: {raw.hex().upper()}")
 
     print(f"{port} listener başlatılıyor...")
-
-    transport2 = SerialTransport(
-        port=config.port,
-        baudrate=config.baudrate,
-        timeout=config.timeout
-    )
-
-    reader2 = RruReader(transport2, config)
-    listener = SerialRFIDListener(reader2, publisher)
+    listener = SerialRFIDListener(reader, publisher)
     listener.start()
 
     return listener
@@ -74,16 +63,13 @@ def main() -> None:
 
         packet, topic = mqtt_messages.get_online_message(True)
         publisher.publish(topic, packet)
-
         print("Online mesaj gönderildi.")
 
         ports = ["/dev/ttyUSB0", "/dev/ttyUSB1"]
 
-        #ports = ["/dev/tty.usbserial-0001"]
-
-        for port in ports:
+        for i, port in enumerate(ports, start=1):
             try:
-                listener = create_reader_and_listener(port, publisher)
+                listener = create_reader_and_listener(port, publisher, i)
                 listeners.append(listener)
             except Exception as e:
                 print(f"{port} başlatılırken hata: {e}")
