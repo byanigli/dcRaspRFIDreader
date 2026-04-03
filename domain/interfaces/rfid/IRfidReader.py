@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from domain.entites.rfid.ReaderConfig import ReaderConfig
 from domain.entites.rfid.TagRead import TagRead
 
 
@@ -20,3 +21,7 @@ class IRfidReader(ABC):
     @abstractmethod
     def inventory(self) -> List[TagRead]:
         pass
+
+    def getConfig(self)-> ReaderConfig:
+        pass
+

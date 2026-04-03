@@ -39,6 +39,9 @@ class RruReader(IRfidReader):
         raw = self.transport.receive(1024)
         return RruResponseParser.parse_inventory(raw)
 
+    def getConfig(self) -> ReaderConfig:
+        return self.config
+
 
 
     def get_reader_info_parsed_from_raw(self, raw: bytes) -> dict:
