@@ -1,23 +1,43 @@
-import json
 import threading
 import time
-
-from domain.entites.ProtocolFrame import ProtocolFrame
-from domain.entites.e_UHF_RFID_TAG_READ import e_UHF_RFID_TAG_READ
 from domain.interfaces.rfid.IRfidReader import IRfidReader
-from domain.services.mqtt_frame_builder import FrameBuilder
 from domain.services.mqtt_messages import MqttMessages
-from domain.services.uhfRfidTagReadBuilder import uhfRfidTagReadBuilder
+
 
 class SerialRFIDListener(threading.Thread):
     def __init__(self, reader, publisher):
         super().__init__(daemon=True)
-        self.reader:IRfidReader  = reader
+        self.reader: IRfidReader = reader
         self.publisher = publisher
         self.running = True
         self.last_seen = {}
-        self.dedup_seconds = 2
+        self.dedup_seconds = 60  # 1 dakika
+        self.cleanup_interval = 300  # 5 dk
+        self.last_cleanup = time.time()
         self.mqtt_messages = MqttMessages()
+
+    def _can_process_epc(self, epc: str, now: float) -> bool:
+        last_time = self.last_seen.get(epc)
+        if last_time is None:
+            self.last_seen[epc] = now
+            return True
+
+        if (now - last_time) > self.dedup_seconds:
+            self.last_seen[epc] = now
+            return True
+
+        return False
+
+    def _cleanup_old_epcs(self, now: float):
+        if now - self.last_cleanup < self.cleanup_interval:
+            return
+
+        expire_before = now - self.dedup_seconds
+        self.last_seen = {
+            epc: ts for epc, ts in self.last_seen.items()
+            if ts > expire_before
+        }
+        self.last_cleanup = now
 
     def run(self):
         try:
@@ -30,24 +50,28 @@ class SerialRFIDListener(threading.Thread):
                     tags = self.reader.inventory()
                     now = time.time()
 
-                    for tag in tags:
-                        if tag.epc not in self.last_seen or (now - self.last_seen[tag.epc]) > self.dedup_seconds:
+                    self._cleanup_old_epcs(now)
 
-                            if self.reader.__class__.__name__ == "RruReader":
-                                self.last_seen[tag.epc] = now
-                                antenna = self.reader.getConfig().antennaNumber
-                                payload = self.mqtt_messages.get_UHF_Read_Tag_Message(antenna, tag.epc, 255)
-                                topic = payload[1]
-                                packet = payload[0]
-                                print(
-                                    f"[RFID READ] "
-                                    f"reader={self.reader.__class__.__name__} "
-                                    f"antenna={antenna} "
-                                    f"epc={tag.epc} "
-                                    f"time={time.strftime('%H:%M:%S')} "
-                                    f"topic={topic}"
-                                )
-                                self.publisher.publish(payload[1],payload[0])
+                    for tag in tags:
+                        if not self._can_process_epc(tag.epc, now):
+                            continue
+
+                        if self.reader.__class__.__name__ == "RruReader":
+                            antenna = self.reader.getConfig().antennaNumber
+                            packet, topic = self.mqtt_messages.get_UHF_Read_Tag_Message(
+                                antenna, tag.epc, 255
+                            )
+
+                            print(
+                                f"[RFID READ] "
+                                f"reader={self.reader.__class__.__name__} "
+                                f"antenna={antenna} "
+                                f"epc={tag.epc} "
+                                f"time={time.strftime('%H:%M:%S')} "
+                                f"topic={topic}"
+                            )
+
+                            self.publisher.publish(topic, packet)
 
                     time.sleep(0.1)
 
