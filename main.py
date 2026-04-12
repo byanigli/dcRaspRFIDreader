@@ -33,6 +33,10 @@ def create_reader_and_listener(port: str, publisher: MqttPublisher, antenna_numb
     print(f"{port} PARSED READER INFO: {reader.get_reader_info_parsed_from_raw(raw)}")
     print("---------------------------------------------------------------------------------")
 
+    raw = reader.get_reader_info()
+    print(f"{port} RAW WORK MODE INFO: {raw.hex().upper()}")
+    print("---------------------------------------------------------------------------------")
+
     raw = reader.set_reader_power(28)
     print(f"{port} RAW SET READER: {raw.hex().upper()}")
 
