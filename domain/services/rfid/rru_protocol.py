@@ -3,7 +3,7 @@ class RruProtocol:
     POLYNOMIAL = 0x8408
 
     CMD_GET_READER_INFO = 0x21
-    CMD_GET_WORK_MODE = 0x35
+    CMD_GET_WORK_MODE = 0x36
     CMD_INVENTORY = 0x01  # bunu cihaz dokümanındaki gerçek inventory code ile güncelle
     CMD_READ = 0x02  # bunu da gerçek read cmd ile güncelle
     CMD_SET_POWER = 0x2F
