@@ -41,7 +41,8 @@ def create_reader_and_listener(port: str, publisher: MqttPublisher, antenna_numb
     print(f"{port} RAW  GET WORK MODE INFO: {raw.hex().upper()}")
     print("---------------------------------------------------------------------------------")
 
-    raw = reader.set_reader_power(28)
+    power = 18 if antenna_number == 1 else 28
+    raw = reader.set_reader_power(power)
     print(f"{port} RAW SET READER: {raw.hex().upper()}")
 
     print(f"{port} listener başlatılıyor...")

@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="27a7938b-addd-4593-a6f8-5acfe9dfb9df" name="Changes" comment="ds">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/interfaces/rfid/IRfidReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/domain/interfaces/rfid/IRfidReader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/services/rfid/rru_protocol.py" beforeDir="false" afterPath="$PROJECT_DIR$/domain/services/rfid/rru_protocol.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infrastructure/rfid/rru_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/infrastructure/rfid/rru_reader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -111,7 +108,8 @@
       <workItem from="1775139736523" duration="17442000" />
       <workItem from="1775647253152" duration="5035000" />
       <workItem from="1775810067594" duration="1176000" />
-      <workItem from="1775843043275" duration="8274000" />
+      <workItem from="1775843043275" duration="9996000" />
+      <workItem from="1775999975350" duration="92000" />
     </task>
     <task id="LOCAL-00001" summary="ds">
       <option name="closed" value="true" />
@@ -297,7 +295,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775992170172</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="ds">
+      <option name="closed" value="true" />
+      <created>1775994882352</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1775994882352</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
