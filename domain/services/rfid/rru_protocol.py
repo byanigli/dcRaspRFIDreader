@@ -3,6 +3,7 @@ class RruProtocol:
     POLYNOMIAL = 0x8408
 
     CMD_GET_READER_INFO = 0x21
+    CMD_SET_WORK_MODE = 0x35
     CMD_GET_WORK_MODE = 0x36
     CMD_INVENTORY = 0x01  # bunu cihaz dokümanındaki gerçek inventory code ile güncelle
     CMD_READ = 0x02  # bunu da gerçek read cmd ile güncelle
@@ -35,6 +36,11 @@ class RruProtocol:
     @classmethod
     def get_reader_info(cls, address: int = 0x00) -> bytes:
         return cls.build_frame(address, cls.CMD_GET_READER_INFO)
+
+    @classmethod
+    def set_work_mode(cls, address: int = 0x00) -> bytes:
+        settings = bytes([0x00, 0x00, 0x01, 0x02, 0x01, 0x00])
+        return cls.build_frame(address, cls.CMD_SET_WORK_MODE, settings)
 
     @classmethod
     def get_work_mode(cls, address: int = 0x00) -> bytes:

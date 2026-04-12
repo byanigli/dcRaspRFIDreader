@@ -19,6 +19,10 @@ class IRfidReader(ABC):
         pass
 
     @abstractmethod
+    def set_reader_work_mode(self) -> bytes:
+        pass
+
+    @abstractmethod
     def get_reader_work_mode(self) -> bytes:
         pass
 

@@ -24,6 +24,11 @@ class RruReader(IRfidReader):
         self.transport.send(cmd)
         return self.transport.receive(256)
 
+    def set_reader_work_mode(self) -> bytes:
+        cmd = RruProtocol.set_work_mode()
+        self.transport.send(cmd)
+        return self.transport.receive(256)
+
     def get_reader_work_mode(self) -> bytes:
         cmd = RruProtocol.get_work_mode(self.config.address)
         self.transport.send(cmd)
@@ -46,8 +51,6 @@ class RruReader(IRfidReader):
 
     def getConfig(self) -> ReaderConfig:
         return self.config
-
-
 
     def get_reader_info_parsed_from_raw(self, raw: bytes) -> dict:
         return RruResponseParser.parse_reader_info(raw)
