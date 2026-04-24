@@ -11,7 +11,7 @@ class SerialRFIDListener(threading.Thread):
         self.publisher = publisher
         self.running = True
         self.last_seen = {}
-        self.dedup_seconds = 60  # 1 dakika
+        self.dedup_seconds = 3600  # 1 dakika
         self.cleanup_interval = 300  # 5 dk
         self.last_cleanup = time.time()
         self.mqtt_messages = MqttMessages()
